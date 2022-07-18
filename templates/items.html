@@ -1,0 +1,28 @@
+<html>
+    <body>
+        <div>
+            <table>
+                <thead>
+                    {% for key in datasets.keys %}
+                    <th><h1>{{key}}</h1></th>
+                    {% endfor %}
+                </thead>
+                <tbody>
+                {% for dataset in datasets %}
+                    <tr>
+                    {% for key in datasets.keys %}
+                    {% if key == 'img' %}
+                    <td><img src="data:image/png;base64, {{dataset[key]}}"></img></td>
+                    {% elif key == 'attachment' %}
+                    <td><a href="/download/{{dataset['id']}}/">download data</a></td>
+                    {%else%}
+                    <td>{{dataset[key]}}</td>
+                    {%endif%}
+                    {%endfor%}
+                    </tr>
+                {%endfor%}
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
