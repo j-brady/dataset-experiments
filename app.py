@@ -22,28 +22,42 @@ def read_root():
         datasets.append(dataset)
     return json.dumps(datasets)
 
+@app.get("/findone/{column}/{value}", response_class=HTMLResponse)
+def find_one(request: Request, column: str, value: str):
+    query = {column: eval(value)}
+    dataset = db["table"].find_one(**query)
+    return templates.TemplateResponse("item.html", {"dataset":dataset, "request": request, "id":column, "value": value})
 
-@app.get("/item/{id}", response_class=HTMLResponse)
-def read_item(request: Request, id: str):
+@app.get("/find/{column}/{value}", response_class=HTMLResponse)
+def find(request: Request, column: str, value: str):
+    query = {column: eval(value)}
+    datasets = db["table"].find(**query)
+    return templates.TemplateResponse("items.html", {"datasets":datasets, "request": request, "id":column, "value": value})
+
+@app.get("/find/{column}/between/", response_class=HTMLResponse)
+def find_between(request: Request, column: str, mini: int=1, maxi: int=10):
+    """ 
     
-    dataset = db["table"].find_one(id=id)
-    return templates.TemplateResponse("item.html", {"dataset":dataset, "request": request, "id":id})
-
-@app.get("/item/{id_min}/{id_max}", response_class=HTMLResponse)
-def read_range(request: Request, id_min: str, id_max: str):
-    if id_max < id_min:
-        id_min, id_max = id_max, id_min
+    Example
+    -------
+    http://127.0.0.1:8000/find/data/between/?mini=1&maxi=5
+    """
+    if maxi < mini:
+        mini, maxi = maxi, mini
     else:
         pass
+    query = {column: {"between": [mini, maxi]}}
+    datasets = db["table"].find(**query)
+    return templates.TemplateResponse("items.html", {"datasets":datasets, "request": request})
 
-
-@app.get("/contains/{name}", response_class=HTMLResponse)
-def read_items(request: Request, name: str):
-    datasets = db["table"].find(name={"startswith": name})
-    return templates.TemplateResponse("items.html", {"datasets":datasets, "request": request, "name":name})
+@app.get("/{column}/startswith/{query}", response_class=HTMLResponse)
+def find_startswith(request: Request, column: str, query: str):
+    dic = {column: {"startswith": query}}
+    datasets = db["table"].find(**dic)
+    return templates.TemplateResponse("items.html", {"datasets":datasets, "request": request, "name":query})
 
 @app.get("/download/{id}", response_class=FileResponse)
-def get_attachment(request: Request, id: str):
+def download_attachment(request: Request, id: str):
     attachment = db["table"].find_one(id=id).get("attachment")
     temp_file = Path("static/tmp.zip")
     if attachment is not None:

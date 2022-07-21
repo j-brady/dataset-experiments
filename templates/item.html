@@ -1,23 +1,23 @@
-<html>
-    <body>
-        <div>
-            <table>
-                <thead>
-                    {% for key in dataset.keys() %}
-                    <th><h1>{{key}}</h1></th>
-                    {% endfor %}
-                </thead>
-                <tbody>
-                    {% for key, value in dataset.items() %}
-                    {% if key == 'img' %}
-                    <td><img src="data:image/png;base64, {{value}}"></img></td>
-                    {%else%}
-                    <td>{{value}}</td>
-                    {%endif%}
-                    {%endfor%}
-                </tbody>
+{% extends "base.html" %}
+{% block title %} {{id}} {% endblock %}
+{% block content %}
+<div>
+    <table class="pure-table">
+        <thead>
+            {% for key in dataset.keys() %}
+            <th><h1>{{key}}</h1></th>
+            {% endfor %}
+        </thead>
+        <tbody>
+            {% for key, value in dataset.items() %}
+            {% if key == 'img' %}
+            <td><img src="data:image/png;base64, {{value}}"></img></td>
+            {%else%}
+            <td>{{value}}</td>
+            {%endif%}
+            {%endfor%}
+        </tbody>
 
-            </table>
-        </div>
-    </body>
-</html>
+    </table>
+</div>
+{% endblock %}
