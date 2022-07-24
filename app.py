@@ -3,13 +3,10 @@ from pathlib import Path
 from enum import Enum
 
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import table
 
-
-from models import Dataset
 from db import db
 
 app = FastAPI()
@@ -19,6 +16,8 @@ templates = Jinja2Templates(directory="templates")
 
 
 class Operator(Enum):
+    """Queries"""
+
     startswith = "startswith"
     endswith = "endswith"
     gt = "gt"
@@ -35,12 +34,9 @@ class Table(Enum):
     table = "table"
 
 
-@app.get("/")
-def read_root():
-    datasets = []
-    for dataset in db["table"]:
-        datasets.append(dataset)
-    return json.dumps(datasets)
+@app.get("/", response_class=HTMLResponse)
+def root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request, "db": db})
 
 
 @app.get("/{table}/findone/{column}/{value}", response_class=HTMLResponse)
@@ -55,8 +51,7 @@ def find_one(request: Request, table: Table, column: str, value: str):
 
 @app.get("/{table}/find/{column}/{value}", response_class=HTMLResponse)
 def find(request: Request, table: Table, column: str, value: str):
-    query = {column: eval(value)}
-    print(table.value)
+    query = {column: value}
     datasets = db[table.value].find(**query)
     return templates.TemplateResponse(
         "items.html",
@@ -90,6 +85,7 @@ def find_operator(
     request: Request, table: Table, column: str, operator: Operator, value: str
 ):
     """
+    Build a query into your database using the dataset query operators
 
     Parameters
     ----------
@@ -102,13 +98,21 @@ def find_operator(
         Enum with valid operators for interfacing with dataset api
     value: str
         value you wish to query your database with
-    
+
     Example
     -------
-    To get ids from "table" with values less than 10: 
+    To get ids from "table" with values less than 10:
     http://127.0.0.1:8000/table/id/lt/10
 
-    To get names from
+    To use "like" or "ilike" with % wildcards (%25 used to escape %):
+    http://127.0.0.1:8000/table/name/like/monty%25
+
+
+    See the dataset docs for more details on the advanced queries
+    http://127.0.0.1:8000/<table-name>/<column-name>/<operator>/<value>
+
+    Where <table-name>, <column-name>, <operator> and <value> are the database table name,
+     column name, operator and value to query against, respectively.
 
     """
     dic = {column: {operator.value: value}}
