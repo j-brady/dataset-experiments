@@ -1,7 +1,7 @@
 #+TITLE: Readme
 
 * Building a simple API using ~dataset~,  ~pydantic~ and ~FastAPI~
-~dataset~ library used to build a ~sqlite3~ database and ~FastAPI~ used to provide a simple API for queries. ~pydantic~ is used to perform data validation.
+~dataset~ library used to build an ~sqlite3~ database and ~FastAPI~ used to provide a simple API for queries. ~pydantic~ is used to perform data validation.
 
 A simple example database is created which stores ~.png~ images as ~base64~ strings  (to be rendered by browser) along with a zip archive (stored as ~LargeBinary~) which can be downloaded.
 * Installation
