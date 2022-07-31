@@ -2,6 +2,8 @@
 
 * Building a simple API using ~dataset~,  ~pydantic~ and ~FastAPI~
 ~dataset~ library used to build a ~sqlite3~ database and ~FastAPI~ used to provide a simple API for queries. ~pydantic~ is used to perform data validation.
+
+A simple example database is created which stores ~.png~ images as ~base64~ strings  (to be rendered by browser) along with a zip archive (stored as ~LargeBinary~) which can be downloaded.
 * Installation
 ** Using Makefile
 #+begin_src bash
@@ -42,3 +44,7 @@ make open
  http://localhost:8000/table/find/name/ham will find all rows with the value ~ham~ in the ~name~ column.
 
  http://localhost:8000/table/find/data/between/?mini=10&maxi=20 will query ~data~ column of ~table~ for values between 10 and 20.
+
+* Todo
+- allow for arbitrary SQL queries to be submitted
+- re-organize (package, rather than Makefile)

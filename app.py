@@ -16,7 +16,7 @@ templates = Jinja2Templates(directory="templates")
 
 
 class Operator(Enum):
-    """Queries"""
+    """Operators for dataset queries"""
 
     startswith = "startswith"
     endswith = "endswith"
@@ -31,6 +31,7 @@ class Operator(Enum):
 
 
 class Table(Enum):
+    """ Add allowed table names here """
     table = "table"
 
 
