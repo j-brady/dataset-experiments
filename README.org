@@ -41,9 +41,9 @@ make open
 
  [[http://localhost:8000/table/name/like/%25am%25]] will query table named ~table~ and return all values for the column ~name~ that satisfy ~%am%~ pattern.
 
- http://localhost:8000/table/find/name/ham will find all rows with the value ~ham~ in the ~name~ column.
+ [[http://localhost:8000/table/find/name/ham]] will find all rows with the value ~ham~ in the ~name~ column.
 
- http://localhost:8000/table/find/data/between/?mini=10&maxi=20 will query ~data~ column of ~table~ for values between 10 and 20.
+ [[http://localhost:8000/table/find/data/between/?mini=10&maxi=20]] will query ~data~ column of ~table~ for values between 10 and 20.
 
 * Todo
 - allow for arbitrary SQL queries to be submitted
