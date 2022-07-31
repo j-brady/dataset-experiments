@@ -1,11 +1,11 @@
-from io import BytesIO
 import random
 from base64 import b64encode
+from io import BytesIO
 from zipfile import ZipFile
 
-from sqlalchemy import LargeBinary
 import dataset
 from PIL import Image
+from sqlalchemy import LargeBinary
 
 from models import Dataset
 
@@ -31,8 +31,9 @@ def zip_file():
 if __name__ == "__main__":
     table = db["table"]
     names = ["spam", "ham", "eggs"]
+    len_names = len(names)
     for i in range(100):
-        name = names[i % 3]
+        name = names[i % len_names]
         data = i
         img = image_to_b64()
         attach = zip_file()

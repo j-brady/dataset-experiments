@@ -74,7 +74,7 @@ def find_between(
     else:
         pass
     query = {column: {"between": [mini, maxi]}}
-    datasets = db[table].find(**query)
+    datasets = db[table.value].find(**query)
     return templates.TemplateResponse(
         "items.html", {"datasets": datasets, "request": request}
     )

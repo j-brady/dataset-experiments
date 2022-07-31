@@ -1,0 +1,44 @@
+#+TITLE: Readme
+
+* Building a simple API using ~dataset~,  ~pydantic~ and ~FastAPI~
+~dataset~ library used to build a ~sqlite3~ database and ~FastAPI~ used to provide a simple API for queries. ~pydantic~ is used to perform data validation.
+* Installation
+** Using Makefile
+#+begin_src bash
+make install
+#+end_src
+
+Runs the following commands to create a virtual environment:
+
+#+begin_src bash
+python3.10 -m venv venv
+source venv/bin/activate && pip3 install --upgrade pip && pip install dataset pillow fastapi "uvicorn[standard]" pydantic ipython jinja2
+#+end_src
+
+Then creates some dummy data:
+
+#+begin_src bash
+python db.py
+#+end_src
+
+ Then starts a uvicorn server:
+ #+begin_src bash
+uvicorn app:app --reload
+ #+end_src
+
+ Now you can go to localhost and play around
+ #+begin_src bash
+make open
+ #+end_src
+
+ Will open a sample query in firefox (probably need to use a separate shell to run this).
+
+* Examples
+
+[[http://localhost:8000/table/id/gt/15]] will query the table named ~table~ and return data for id's greater than 15. The equivalent SQL query would be ~SELECT * FROM 'table' WHERE id > 15~.
+
+ [[http://localhost:8000/table/name/like/%25am%25]] will query table named ~table~ and return all values for the column ~name~ that satisfy ~%am%~ pattern.
+
+ http://localhost:8000/table/find/name/ham will find all rows with the value ~ham~ in the ~name~ column.
+
+ http://localhost:8000/table/find/data/between/?mini=10&maxi=20 will query ~data~ column of ~table~ for values between 10 and 20.
